@@ -115,6 +115,17 @@ void Storage::unsubscribe_all(IObserver* observer) {
     }
 }
 
+void Storage::reset_for_tests() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    data_.clear();
+    observers_.clear();
+    insertion_order_.clear();
+    last_access_.clear();
+    eviction_strategy_ = std::make_unique<LRUEvictionStrategy>();
+    max_keys_ = 1000;
+    access_clock_ = 0;
+}
+
 void Storage::touch_locked(const std::string& key) {
     last_access_[key] = ++access_clock_;
 }

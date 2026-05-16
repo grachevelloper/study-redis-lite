@@ -6,8 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_executable(redis-lite
-    src/main.cpp
+add_library(redis_lite_core
     src/commands/command_factory.cpp
     src/commands/del_command.cpp
     src/commands/exists_command.cpp
@@ -24,9 +23,19 @@ add_executable(redis-lite
     src/transaction/transaction.cpp
 )
 
-target_include_directories(redis-lite PRIVATE include)
-target_link_libraries(redis-lite PRIVATE pthread)
+target_include_directories(redis_lite_core PUBLIC include)
+target_link_libraries(redis_lite_core PUBLIC pthread)
+
+add_executable(redis-lite
+    src/main.cpp
+)
+
+target_link_libraries(redis-lite PRIVATE redis_lite_core)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
+    target_compile_options(redis_lite_core PRIVATE -Wall -Wextra -Wpedantic)
     target_compile_options(redis-lite PRIVATE -Wall -Wextra -Wpedantic)
 endif()
+
+enable_testing()
+add_subdirectory(tests)

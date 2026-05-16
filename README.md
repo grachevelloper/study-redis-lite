@@ -36,21 +36,22 @@ DEL name
 GET name
 ```
 
-## Поддерживаемые команды
+## Тестирование
 
-| Команда | Что делает | Ответ |
-|---|---|---|
-| `PING` | Проверяет соединение | `PONG` |
-| `SET key value` | Сохраняет значение | `OK` |
-| `GET key` | Читает значение | значение или `(nil)` |
-| `DEL key` | Удаляет ключ | `OK` или `(nil)` |
-| `EXISTS key` | Проверяет наличие ключа | `1` или `0` |
-| `BEGIN` | Начинает транзакцию | `OK` |
-| `COMMIT` | Подтверждает транзакцию | `OK` |
-| `ROLLBACK` | Откатывает команды транзакции | `OK` |
-| `SUBSCRIBE key` | Подписывает клиента на изменения ключа | `OK` |
+Проект поддерживает unit-тесты на GoogleTest и отдельные сценарные мини-программы.
 
-Значения читаются как одно слово: `SET name Ivan` работает, а `SET name Ivan Petrov` сейчас не поддерживается.
+Сборка тестов:
+
+```bash
+cmake -S . -B build
+cmake --build build
+```
+
+Запуск unit-тестов:
+
+```bash
+ctest --test-dir build --output-on-failure
+```
 
 ## Как проверить транзакцию
 
@@ -86,13 +87,3 @@ SET name Maria
 ```text
 NOTIFY name Maria
 ```
-
-## Что где лежит
-
-- `include/storage` и `src/storage` — потокобезопасное хранилище, Singleton, LRU/FIFO eviction.
-- `include/commands` и `src/commands` — команды через паттерн Command.
-- `include/transaction` и `src/transaction` — история команд для `ROLLBACK`.
-- `include/middleware` и `src/middleware` — проверка команд и маршрутизация.
-- `include/session` и `src/session` — работа с одним клиентом.
-- `include/server` и `src/server` — TCP-сервер, который принимает подключения.
-

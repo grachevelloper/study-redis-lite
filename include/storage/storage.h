@@ -30,6 +30,9 @@ public:
     void subscribe(const std::string& key, const std::shared_ptr<IObserver>& observer);
     void unsubscribe_all(IObserver* observer);
 
+    // Test hook for deterministic unit and scenario execution.
+    void reset_for_tests();
+
 private:
     Storage();
 
