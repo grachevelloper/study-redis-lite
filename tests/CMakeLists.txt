@@ -28,6 +28,7 @@ add_executable(redis-lite-unit-tests
 target_include_directories(redis-lite-unit-tests PRIVATE
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/tests
+    ${PROJECT_SOURCE_DIR}/tests/helpers
 )
 target_link_libraries(redis-lite-unit-tests PRIVATE
     redis_lite_core
@@ -44,6 +45,7 @@ function(add_scenario name)
     target_include_directories(${name} PRIVATE
         ${PROJECT_SOURCE_DIR}/include
         ${PROJECT_SOURCE_DIR}/tests
+        ${PROJECT_SOURCE_DIR}/tests/helpers
     )
     target_link_libraries(${name} PRIVATE redis_lite_core pthread)
 endfunction()
